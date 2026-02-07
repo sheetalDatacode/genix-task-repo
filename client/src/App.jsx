@@ -9,7 +9,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/data')
+    fetch('http://localhost:5000/api/data?limit=500')
       .then(res => {
         if (res.status === 429) throw new Error("RATE_LIMIT_EXCEEDED");
         return res.json();
@@ -32,11 +32,11 @@ function App() {
 
   if (loading) return <h1 style={{ color: 'white' }}>Initializing Stream...</h1>;
   
-  // Show a professional error message if rate limited
+// error message when rate  limit is exceeded.
   if (error === "RATE_LIMIT_EXCEEDED") {
     return (
       <div style={{ background: 'black', color: 'red', height: '100vh', padding: '20px' }}>
-        <h2>⚠️ SECURITY ALERT: RATE LIMIT EXCEEDED</h2>
+        <h2>SECURITY ALERT: RATE LIMIT EXCEEDED</h2>
         <p>Too many requests detected. Please wait 60 seconds before reconnecting.</p>
       </div>
     );
@@ -47,10 +47,11 @@ function App() {
       <h1 style={{ color: '#00ff00' }}>AR GENIX REAL-TIME MONITOR</h1>
       {List && items.length > 0 ? (
         <List
-          height={window.innerHeight ? window.innerHeight - 150 : 600} // Fix the NaN bug
+          height={window.innerHeight ? window.innerHeight - 150 : 600}
           itemCount={items.length}
           itemSize={40}
           width={'100%'}
+          style={{overflowX: 'hidden'}}
         >
           {Row}
         </List>
